@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout-bluegreen
+  namespace: argo-rollouts
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: nginx-bluegreen
+    
+  template:
+    metadata:
+      labels:
+        app: nginx-bluegreen
+      
+    spec:
+      containers:
+      - name: nginx
+        image: docker.io/sam3319/nginx-image-lab:1.0.0
+        imagePullPolicy: IfNotPresent
+
+        ports:
+          - name: http
+            containerPort: 80
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 2
+          periodSeconds: 5
+
+  strategy:
+    blueGreen:
+      activeService: rollout-bluegreen-active
+      previewService: rollout-bluegreen-preview
+      autoPromotionEnabled: false

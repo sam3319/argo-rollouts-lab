@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: docker.io/sam3319/nginx-image-lab:1.0.0
+          image: docker.io/sam3319/nginx-image-lab:1.0.1
           imagePullPolicy: IfNotPresent
 
           ports:
